@@ -15,6 +15,7 @@ This library supports [version 1.18 and later][ver] of Go.
 
 ```go
 import "github.com/cholland1989/go-delay/pkg/delay"
+import "github.com/cholland1989/go-delay/pkg/sleep"
 ```
 
 The `delay` package provides utility functions for calculating linear backoff,
@@ -39,31 +40,8 @@ representing 0.5 seconds.
 jitter. For example, `delay.RandomJitter(time.Second, 0.5)` will return a
 `time.Duration` between 0.5 seconds and 1.5 seconds.
 
-```go
-import "github.com/cholland1989/go-delay/pkg/sleep"
-```
-
-The `sleep` package provides utility functions for performing linear backoff,
-exponential backoff, rate limiting, and random jitter.
-
-`sleep.LinearBackoff` pauses the current goroutine for the specified duration
-with linear backoff and random jitter. For example,
-`sleep.LinearBackoff(time.Second, 2.0, 0.5, 3)` will pause the current
-goroutine for a duration between 4 seconds and 12 seconds.
-
-`sleep.ExponentialBackoff` pauses the current goroutine for the specified
-duration with exponential backoff and random jitter. For example,
-`sleep.ExponentialBackoff(time.Second, 2.0, 0.5, 3)` will pause the current
-goroutine for a duration between 8 seconds and 24 seconds.
-
-`sleep.RateLimit` pauses the current goroutine for the minimum duration per
-action with random jitter. For example, `sleep.RateLimit(2, time.Second, 0.5)`
-will pause the current goroutine for a duration between 0.25 seconds and 0.75
-seconds.
-
-`sleep.RandomJitter` pauses the current goroutine for the specified duration
-with random jitter. For example, `sleep.RandomJitter(time.Second, 0.5)` will
-pause the current goroutine for a duration between 0.5 seconds and 1.5 seconds.
+The `sleep` package provides wrapper functions to simplify the most common use
+case, passing the calculated delay to `time.Sleep`.
 
 See the [documentation][doc] for more details.
 
