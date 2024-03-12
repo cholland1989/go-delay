@@ -1,4 +1,4 @@
-# go-delay [![Documentation][doc-img]][doc]
+# go-delay [![Documentation][doc-img]][doc] [![Build Status][ci-img]][ci]
 
 Utility functions for calculating and performing linear backoff, exponential
 backoff, rate limiting, and random jitter.
@@ -71,6 +71,8 @@ See the [documentation][doc] for more details.
 
 Released under the [MIT License](LICENSE).
 
+[ci]: https://github.com/cholland1989/go-delay/actions/workflows/build.yml
+[ci-img]: https://github.com/cholland1989/go-delay/actions/workflows/build.yml/badge.svg
 [doc]: https://pkg.go.dev/github.com/cholland1989/go-delay/pkg/delay
 [doc-img]: https://pkg.go.dev/badge/github.com/cholland1989/go-delay/pkg/delay
 [ver]: https://go.dev/doc/devel/release
