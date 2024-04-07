@@ -1,7 +1,6 @@
 # go-delay [![Documentation][doc-img]][doc] [![Build Status][ci-img]][ci]
 
-Utility functions for calculating and performing linear backoff, exponential
-backoff, rate limiting, and random jitter.
+Utility functions for calculating backoff and jitter.
 
 ## Installation
 
@@ -18,8 +17,7 @@ import "github.com/cholland1989/go-delay/pkg/delay"
 import "github.com/cholland1989/go-delay/pkg/sleep"
 ```
 
-The `delay` package provides utility functions for calculating linear backoff,
-exponential backoff, rate limiting, and random jitter.
+Package `delay` provides utility functions for calculating backoff and jitter.
 
 `delay.LinearBackoff` calculates the specified duration with linear backoff,
 according to the formula `duration * multiplier * (attempt + 1)`. For example,
@@ -40,8 +38,8 @@ representing 0.5 seconds.
 jitter. For example, `delay.RandomJitter(time.Second, 0.5)` will return a
 `time.Duration` between 0.5 seconds and 1.5 seconds.
 
-The `sleep` package provides wrapper functions to simplify the most common use
-case, passing the calculated delay to `time.Sleep`.
+Package `sleep` provides wrapper functions to simplify the most common use case,
+passing the calculated delay to `time.Sleep`.
 
 See the [documentation][doc] for more details.
 

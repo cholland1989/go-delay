@@ -1,5 +1,4 @@
-// Package delay provides utility functions for calculating linear backoff,
-// exponential backoff, rate limiting, and random jitter.
+// Package delay provides utility functions for calculating backoff and jitter.
 package delay
 
 import (

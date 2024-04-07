@@ -1,5 +1,5 @@
-// Package sleep provides utility functions for performing linear backoff,
-// exponential backoff, rate limiting, and random jitter.
+// Package sleep provides wrapper functions to simplify the most common use
+// case, passing the calculated delay to [time.Sleep].
 package sleep
 
 import (
