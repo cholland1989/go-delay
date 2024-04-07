@@ -44,3 +44,9 @@ func TestExponentialBackoff(test *testing.T) {
 		})
 	}
 }
+
+func BenchmarkExponentialBackoff(benchmark *testing.B) {
+	for count := 0; count < benchmark.N; count++ {
+		ExponentialBackoff(time.Millisecond, float64(count), benchmark.N-count)
+	}
+}

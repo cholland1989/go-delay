@@ -48,3 +48,9 @@ func TestRandomJitter(test *testing.T) {
 		})
 	}
 }
+
+func BenchmarkRandomJitter(benchmark *testing.B) {
+	for count := 0; count < benchmark.N; count++ {
+		RandomJitter(time.Millisecond, float64(count))
+	}
+}

@@ -44,3 +44,9 @@ func TestLinearBackoff(test *testing.T) {
 		})
 	}
 }
+
+func BenchmarkLinearBackoff(benchmark *testing.B) {
+	for count := 0; count < benchmark.N; count++ {
+		LinearBackoff(time.Millisecond, float64(count), benchmark.N-count)
+	}
+}

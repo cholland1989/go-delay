@@ -43,3 +43,9 @@ func TestFloatToDuration(test *testing.T) {
 		})
 	}
 }
+
+func BenchmarkFloatToDuration(benchmark *testing.B) {
+	for count := 0; count < benchmark.N; count++ {
+		FloatToDuration(float64(count))
+	}
+}

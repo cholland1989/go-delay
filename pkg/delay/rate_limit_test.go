@@ -43,3 +43,9 @@ func TestRateLimit(test *testing.T) {
 		})
 	}
 }
+
+func BenchmarkRateLimit(benchmark *testing.B) {
+	for count := 0; count < benchmark.N; count++ {
+		RateLimit(count, time.Millisecond)
+	}
+}
