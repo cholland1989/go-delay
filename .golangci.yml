@@ -11,6 +11,7 @@ linters:
     - ifshort
     - interfacer
     - intrange
+    - lll
     - maligned
     - nlreturn
     - nonamedreturns

@@ -38,8 +38,7 @@ representing 0.5 seconds.
 jitter. For example, `delay.RandomJitter(time.Second, 0.5)` will return a
 `time.Duration` between 0.5 seconds and 1.5 seconds.
 
-Package `sleep` provides wrapper functions to simplify the most common use case,
-passing the calculated delay to `time.Sleep`.
+Package `sleep` provides wrapper functions to simplify the most common use case.
 
 See the [documentation][doc] for more details.
 

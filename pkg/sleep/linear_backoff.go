@@ -1,6 +1,7 @@
 package sleep
 
 import (
+	"context"
 	"time"
 
 	"github.com/cholland1989/go-delay/pkg/delay"
@@ -9,5 +10,12 @@ import (
 // LinearBackoff pauses the current goroutine for the specified duration with
 // linear backoff and random jitter.
 func LinearBackoff(duration time.Duration, multiplier float64, jitter float64, attempt int) {
-	time.Sleep(delay.RandomJitter(delay.LinearBackoff(duration, multiplier, attempt), jitter))
+	RandomJitter(delay.LinearBackoff(duration, multiplier, attempt), jitter)
+}
+
+// LinearBackoffWithContext pauses the current goroutine for the specified
+// duration with linear backoff and random jitter, or until the context is
+// canceled.
+func LinearBackoffWithContext(ctx context.Context, duration time.Duration, multiplier float64, jitter float64, attempt int) {
+	RandomJitterWithContext(ctx, delay.LinearBackoff(duration, multiplier, attempt), jitter)
 }

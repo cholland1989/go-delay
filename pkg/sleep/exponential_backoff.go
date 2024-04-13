@@ -1,8 +1,9 @@
 // Package sleep provides wrapper functions to simplify the most common use
-// case, passing the calculated delay to [time.Sleep].
+// case.
 package sleep
 
 import (
+	"context"
 	"time"
 
 	"github.com/cholland1989/go-delay/pkg/delay"
@@ -11,5 +12,12 @@ import (
 // ExponentialBackoff pauses the current goroutine for the specified duration
 // with exponential backoff and random jitter.
 func ExponentialBackoff(duration time.Duration, multiplier float64, jitter float64, attempt int) {
-	time.Sleep(delay.RandomJitter(delay.ExponentialBackoff(duration, multiplier, attempt), jitter))
+	RandomJitter(delay.ExponentialBackoff(duration, multiplier, attempt), jitter)
+}
+
+// ExponentialBackoffWithContext pauses the current goroutine for the specified
+// duration with exponential backoff and random jitter, or until the context is
+// canceled.
+func ExponentialBackoffWithContext(ctx context.Context, duration time.Duration, multiplier float64, jitter float64, attempt int) {
+	RandomJitterWithContext(ctx, delay.ExponentialBackoff(duration, multiplier, attempt), jitter)
 }
