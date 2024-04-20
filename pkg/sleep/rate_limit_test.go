@@ -2,6 +2,7 @@ package sleep
 
 import (
 	"context"
+	"errors"
 	"testing"
 	"time"
 )
@@ -29,7 +30,10 @@ func ExampleRateLimitWithContext() {
 		if err == nil {
 			break
 		}
-		RateLimitWithContext(ctx, 10, time.Second, 0.5)
+		err = RateLimitWithContext(ctx, 10, time.Second, 0.5)
+		if err != nil {
+			break
+		}
 	}
 	// Output:
 }
@@ -78,9 +82,11 @@ func TestRateLimitWithContext(test *testing.T) {
 			test.Parallel()
 			for _, ctx := range []context.Context{nil, context.Background()} {
 				timestamp := time.Now()
-				RateLimitWithContext(ctx, params.actions, params.period, 0.0)
+				err := RateLimitWithContext(ctx, params.actions, params.period, 0.0)
 				delay := time.Since(timestamp)
-				if delay < params.expected {
+				if err != nil {
+					test.Fatal(err)
+				} else if delay < params.expected {
 					test.Fatalf("expected %v, got %v", params.expected, delay)
 				}
 			}
@@ -93,9 +99,11 @@ func TestRateLimitWithContext_WithCancel(test *testing.T) {
 	ctx, cancel := context.WithCancel(context.Background())
 	cancel()
 	timestamp := time.Now()
-	RateLimitWithContext(ctx, 1, time.Second, 0.0)
+	err := RateLimitWithContext(ctx, 1, time.Second, 0.0)
 	delay := time.Since(timestamp)
-	if delay > time.Millisecond {
+	if !errors.Is(err, context.Canceled) {
+		test.Fatalf("expected %v, got %v", context.Canceled, err)
+	} else if delay > time.Millisecond {
 		test.Fatalf("%v greater than %v", delay, time.Millisecond)
 	}
 }

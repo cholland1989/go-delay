@@ -18,6 +18,6 @@ func ExponentialBackoff(duration time.Duration, multiplier float64, jitter float
 // ExponentialBackoffWithContext pauses the current goroutine for the specified
 // duration with exponential backoff and random jitter, or until the context is
 // canceled.
-func ExponentialBackoffWithContext(ctx context.Context, duration time.Duration, multiplier float64, jitter float64, attempt int) {
-	RandomJitterWithContext(ctx, delay.ExponentialBackoff(duration, multiplier, attempt), jitter)
+func ExponentialBackoffWithContext(ctx context.Context, duration time.Duration, multiplier float64, jitter float64, attempt int) (err error) {
+	return RandomJitterWithContext(ctx, delay.ExponentialBackoff(duration, multiplier, attempt), jitter)
 }

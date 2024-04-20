@@ -16,6 +16,6 @@ func LinearBackoff(duration time.Duration, multiplier float64, jitter float64, a
 // LinearBackoffWithContext pauses the current goroutine for the specified
 // duration with linear backoff and random jitter, or until the context is
 // canceled.
-func LinearBackoffWithContext(ctx context.Context, duration time.Duration, multiplier float64, jitter float64, attempt int) {
-	RandomJitterWithContext(ctx, delay.LinearBackoff(duration, multiplier, attempt), jitter)
+func LinearBackoffWithContext(ctx context.Context, duration time.Duration, multiplier float64, jitter float64, attempt int) (err error) {
+	return RandomJitterWithContext(ctx, delay.LinearBackoff(duration, multiplier, attempt), jitter)
 }

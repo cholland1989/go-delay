@@ -15,6 +15,6 @@ func RateLimit(actions int, period time.Duration, jitter float64) {
 
 // RateLimitWithContext pauses the current goroutine for the minimum duration
 // per action with random jitter, or until the context is canceled.
-func RateLimitWithContext(ctx context.Context, actions int, period time.Duration, jitter float64) {
-	RandomJitterWithContext(ctx, delay.RateLimit(actions, period), jitter)
+func RateLimitWithContext(ctx context.Context, actions int, period time.Duration, jitter float64) (err error) {
+	return RandomJitterWithContext(ctx, delay.RateLimit(actions, period), jitter)
 }

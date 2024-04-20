@@ -20,4 +20,5 @@ linters:
     - structcheck
     - testpackage
     - varcheck
+    - wrapcheck
     - wsl

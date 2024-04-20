@@ -2,6 +2,7 @@ package sleep
 
 import (
 	"context"
+	"errors"
 	"testing"
 	"time"
 )
@@ -29,7 +30,10 @@ func ExampleLinearBackoffWithContext() {
 		if err == nil {
 			break
 		}
-		LinearBackoffWithContext(ctx, time.Second, 2.0, 0.5, attempt)
+		err = LinearBackoffWithContext(ctx, time.Second, 2.0, 0.5, attempt)
+		if err != nil {
+			break
+		}
 	}
 	// Output:
 }
@@ -80,9 +84,11 @@ func TestLinearBackoffWithContext(test *testing.T) {
 			test.Parallel()
 			for _, ctx := range []context.Context{nil, context.Background()} {
 				timestamp := time.Now()
-				LinearBackoffWithContext(ctx, params.duration, params.multiplier, 0.0, params.attempt)
+				err := LinearBackoffWithContext(ctx, params.duration, params.multiplier, 0.0, params.attempt)
 				delay := time.Since(timestamp)
-				if delay < params.expected {
+				if err != nil {
+					test.Fatal(err)
+				} else if delay < params.expected {
 					test.Fatalf("expected %v, got %v", params.expected, delay)
 				}
 			}
@@ -95,9 +101,11 @@ func TestLinearBackoffWithContext_WithCancel(test *testing.T) {
 	ctx, cancel := context.WithCancel(context.Background())
 	cancel()
 	timestamp := time.Now()
-	LinearBackoffWithContext(ctx, time.Second, 1.0, 0.0, 0)
+	err := LinearBackoffWithContext(ctx, time.Second, 1.0, 0.0, 0)
 	delay := time.Since(timestamp)
-	if delay > time.Millisecond {
+	if !errors.Is(err, context.Canceled) {
+		test.Fatalf("expected %v, got %v", context.Canceled, err)
+	} else if delay > time.Millisecond {
 		test.Fatalf("%v greater than %v", delay, time.Millisecond)
 	}
 }

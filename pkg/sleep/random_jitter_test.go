@@ -2,6 +2,7 @@ package sleep
 
 import (
 	"context"
+	"errors"
 	"testing"
 	"time"
 )
@@ -29,7 +30,10 @@ func ExampleRandomJitterWithContext() {
 		if err == nil {
 			break
 		}
-		RandomJitterWithContext(ctx, time.Second, 0.5)
+		err = RandomJitterWithContext(ctx, time.Second, 0.5)
+		if err != nil {
+			break
+		}
 	}
 	// Output:
 }
@@ -77,10 +81,12 @@ func TestRandomJitterWithContext(test *testing.T) {
 			test.Parallel()
 			for _, ctx := range []context.Context{nil, context.Background()} {
 				timestamp := time.Now()
-				RandomJitterWithContext(ctx, params.duration, params.jitter)
+				err := RandomJitterWithContext(ctx, params.duration, params.jitter)
 				delay := time.Since(timestamp)
 				lower := params.duration - time.Duration(params.jitter*float64(params.duration))
-				if delay < lower {
+				if err != nil {
+					test.Fatal(err)
+				} else if delay < lower {
 					test.Fatalf("%v less than %v", delay, lower)
 				}
 			}
@@ -93,9 +99,11 @@ func TestRandomJitterWithContext_WithCancel(test *testing.T) {
 	ctx, cancel := context.WithCancel(context.Background())
 	cancel()
 	timestamp := time.Now()
-	RandomJitterWithContext(ctx, time.Second, 0.0)
+	err := RandomJitterWithContext(ctx, time.Second, 0.0)
 	delay := time.Since(timestamp)
-	if delay > time.Millisecond {
+	if !errors.Is(err, context.Canceled) {
+		test.Fatalf("expected %v, got %v", context.Canceled, err)
+	} else if delay > time.Millisecond {
 		test.Fatalf("%v greater than %v", delay, time.Millisecond)
 	}
 }

@@ -15,7 +15,7 @@ func RandomJitter(duration time.Duration, jitter float64) {
 
 // RandomJitterWithContext pauses the current goroutine for the specified
 // duration with random jitter, or until the context is canceled.
-func RandomJitterWithContext(ctx context.Context, duration time.Duration, jitter float64) {
+func RandomJitterWithContext(ctx context.Context, duration time.Duration, jitter float64) (err error) {
 	if ctx == nil {
 		RandomJitter(duration, jitter)
 	} else {
@@ -25,7 +25,9 @@ func RandomJitterWithContext(ctx context.Context, duration time.Duration, jitter
 			if !timer.Stop() {
 				<-timer.C
 			}
+			return ctx.Err()
 		case <-timer.C:
 		}
 	}
+	return nil
 }
