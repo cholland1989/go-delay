@@ -17,7 +17,8 @@ import "github.com/cholland1989/go-delay/pkg/delay"
 import "github.com/cholland1989/go-delay/pkg/sleep"
 ```
 
-Package `delay` provides utility functions for calculating backoff and jitter.
+Package [`delay`](https://pkg.go.dev/github.com/cholland1989/go-delay/pkg/delay)
+provides utility functions for calculating backoff and jitter.
 
 `delay.LinearBackoff` calculates the specified duration with linear backoff,
 according to the formula `duration * multiplier * (attempt + 1)`. For example,
@@ -38,7 +39,8 @@ representing 0.5 seconds.
 jitter. For example, `delay.RandomJitter(time.Second, 0.5)` will return a
 `time.Duration` between 0.5 seconds and 1.5 seconds.
 
-Package `sleep` provides wrapper functions to simplify the most common use case.
+Package [`sleep`](https://pkg.go.dev/github.com/cholland1989/go-delay/pkg/sleep)
+provides wrapper functions to simplify the most common use case.
 
 See the [documentation][doc] for more details.
 
@@ -48,6 +50,6 @@ Released under the [MIT License](LICENSE).
 
 [ci]: https://github.com/cholland1989/go-delay/actions/workflows/build.yml
 [ci-img]: https://github.com/cholland1989/go-delay/actions/workflows/build.yml/badge.svg
-[doc]: https://pkg.go.dev/github.com/cholland1989/go-delay/pkg/delay
-[doc-img]: https://pkg.go.dev/badge/github.com/cholland1989/go-delay/pkg/delay
+[doc]: https://pkg.go.dev/github.com/cholland1989/go-delay
+[doc-img]: https://pkg.go.dev/badge/github.com/cholland1989/go-delay
 [ver]: https://go.dev/doc/devel/release
