@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"testing"
 	"time"
+
+	"github.com/stretchr/testify/require"
 )
 
 func ExampleExponentialBackoff() {
@@ -38,9 +40,7 @@ func TestExponentialBackoff(test *testing.T) {
 		test.Run(name, func(test *testing.T) {
 			test.Parallel()
 			delay := ExponentialBackoff(params.duration, params.multiplier, params.attempt)
-			if delay != params.expected {
-				test.Fatalf("expected %v, got %v", params.expected, delay)
-			}
+			require.Equal(test, params.expected, delay)
 		})
 	}
 }

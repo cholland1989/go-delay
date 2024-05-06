@@ -2,9 +2,10 @@ package sleep
 
 import (
 	"context"
-	"errors"
 	"testing"
 	"time"
+
+	"github.com/stretchr/testify/require"
 )
 
 func HealthCheck() error {
@@ -57,9 +58,7 @@ func TestRateLimit(test *testing.T) {
 			timestamp := time.Now()
 			RateLimit(params.actions, params.period, 0.0)
 			delay := time.Since(timestamp)
-			if delay < params.expected {
-				test.Fatalf("expected %v, got %v", params.expected, delay)
-			}
+			require.LessOrEqual(test, params.expected, delay)
 		})
 	}
 }
@@ -84,11 +83,8 @@ func TestRateLimitWithContext(test *testing.T) {
 				timestamp := time.Now()
 				err := RateLimitWithContext(ctx, params.actions, params.period, 0.0)
 				delay := time.Since(timestamp)
-				if err != nil {
-					test.Fatal(err)
-				} else if delay < params.expected {
-					test.Fatalf("expected %v, got %v", params.expected, delay)
-				}
+				require.NoError(test, err)
+				require.LessOrEqual(test, params.expected, delay)
 			}
 		})
 	}
@@ -101,9 +97,6 @@ func TestRateLimitWithContext_WithCancel(test *testing.T) {
 	timestamp := time.Now()
 	err := RateLimitWithContext(ctx, 1, time.Second, 0.0)
 	delay := time.Since(timestamp)
-	if !errors.Is(err, context.Canceled) {
-		test.Fatalf("expected %v, got %v", context.Canceled, err)
-	} else if delay > time.Millisecond {
-		test.Fatalf("%v greater than %v", delay, time.Millisecond)
-	}
+	require.ErrorIs(test, err, context.Canceled)
+	require.GreaterOrEqual(test, time.Millisecond, delay)
 }

@@ -2,9 +2,10 @@ package sleep
 
 import (
 	"context"
-	"errors"
 	"testing"
 	"time"
+
+	"github.com/stretchr/testify/require"
 )
 
 func DatabaseQuery() error {
@@ -58,9 +59,7 @@ func TestExponentialBackoff(test *testing.T) {
 			timestamp := time.Now()
 			ExponentialBackoff(params.duration, params.multiplier, 0.0, params.attempt)
 			delay := time.Since(timestamp)
-			if delay < params.expected {
-				test.Fatalf("expected %v, got %v", params.expected, delay)
-			}
+			require.LessOrEqual(test, params.expected, delay)
 		})
 	}
 }
@@ -86,11 +85,8 @@ func TestExponentialBackoffWithContext(test *testing.T) {
 				timestamp := time.Now()
 				err := ExponentialBackoffWithContext(ctx, params.duration, params.multiplier, 0.0, params.attempt)
 				delay := time.Since(timestamp)
-				if err != nil {
-					test.Fatal(err)
-				} else if delay < params.expected {
-					test.Fatalf("expected %v, got %v", params.expected, delay)
-				}
+				require.NoError(test, err)
+				require.LessOrEqual(test, params.expected, delay)
 			}
 		})
 	}
@@ -103,9 +99,6 @@ func TestExponentialBackoffWithContext_WithCancel(test *testing.T) {
 	timestamp := time.Now()
 	err := ExponentialBackoffWithContext(ctx, time.Second, 1.0, 0.0, 0)
 	delay := time.Since(timestamp)
-	if !errors.Is(err, context.Canceled) {
-		test.Fatalf("expected %v, got %v", context.Canceled, err)
-	} else if delay > time.Millisecond {
-		test.Fatalf("%v greater than %v", delay, time.Millisecond)
-	}
+	require.ErrorIs(test, err, context.Canceled)
+	require.GreaterOrEqual(test, time.Millisecond, delay)
 }

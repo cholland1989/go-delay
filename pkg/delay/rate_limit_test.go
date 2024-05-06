@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"testing"
 	"time"
+
+	"github.com/stretchr/testify/require"
 )
 
 func ExampleRateLimit() {
@@ -37,9 +39,7 @@ func TestRateLimit(test *testing.T) {
 		test.Run(name, func(test *testing.T) {
 			test.Parallel()
 			delay := RateLimit(params.actions, params.period)
-			if delay != params.expected {
-				test.Fatalf("expected %v, got %v", params.expected, delay)
-			}
+			require.Equal(test, params.expected, delay)
 		})
 	}
 }

@@ -2,9 +2,10 @@ package sleep
 
 import (
 	"context"
-	"errors"
 	"testing"
 	"time"
+
+	"github.com/stretchr/testify/require"
 )
 
 func NetworkRequest() error {
@@ -57,9 +58,7 @@ func TestRandomJitter(test *testing.T) {
 			RandomJitter(params.duration, params.jitter)
 			delay := time.Since(timestamp)
 			lower := params.duration - time.Duration(params.jitter*float64(params.duration))
-			if delay < lower {
-				test.Fatalf("%v less than %v", delay, lower)
-			}
+			require.LessOrEqual(test, lower, delay)
 		})
 	}
 }
@@ -84,11 +83,8 @@ func TestRandomJitterWithContext(test *testing.T) {
 				err := RandomJitterWithContext(ctx, params.duration, params.jitter)
 				delay := time.Since(timestamp)
 				lower := params.duration - time.Duration(params.jitter*float64(params.duration))
-				if err != nil {
-					test.Fatal(err)
-				} else if delay < lower {
-					test.Fatalf("%v less than %v", delay, lower)
-				}
+				require.NoError(test, err)
+				require.LessOrEqual(test, lower, delay)
 			}
 		})
 	}
@@ -101,9 +97,6 @@ func TestRandomJitterWithContext_WithCancel(test *testing.T) {
 	timestamp := time.Now()
 	err := RandomJitterWithContext(ctx, time.Second, 0.0)
 	delay := time.Since(timestamp)
-	if !errors.Is(err, context.Canceled) {
-		test.Fatalf("expected %v, got %v", context.Canceled, err)
-	} else if delay > time.Millisecond {
-		test.Fatalf("%v greater than %v", delay, time.Millisecond)
-	}
+	require.ErrorIs(test, err, context.Canceled)
+	require.GreaterOrEqual(test, time.Millisecond, delay)
 }

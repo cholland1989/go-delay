@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"testing"
 	"time"
+
+	"github.com/stretchr/testify/require"
 )
 
 func ExampleRandomJitter() {
@@ -38,13 +40,9 @@ func TestRandomJitter(test *testing.T) {
 			test.Parallel()
 			delay := RandomJitter(params.duration, params.jitter)
 			lower := params.duration - time.Duration(params.jitter*float64(params.duration))
-			if delay < lower {
-				test.Fatalf("%v less than %v", delay, lower)
-			}
+			require.LessOrEqual(test, lower, delay)
 			upper := params.duration + time.Duration(params.jitter*float64(params.duration))
-			if delay > upper {
-				test.Fatalf("%v greater than %v", delay, upper)
-			}
+			require.GreaterOrEqual(test, upper, delay)
 		})
 	}
 }

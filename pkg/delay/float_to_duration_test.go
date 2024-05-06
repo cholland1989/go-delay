@@ -5,6 +5,8 @@ import (
 	"math"
 	"testing"
 	"time"
+
+	"github.com/stretchr/testify/require"
 )
 
 func ExampleFloatToDuration() {
@@ -37,9 +39,7 @@ func TestFloatToDuration(test *testing.T) {
 		test.Run(name, func(test *testing.T) {
 			test.Parallel()
 			duration := FloatToDuration(params.value)
-			if duration != params.expected {
-				test.Fatalf("expected %v, got %v", params.expected, duration)
-			}
+			require.Equal(test, params.expected, duration)
 		})
 	}
 }
