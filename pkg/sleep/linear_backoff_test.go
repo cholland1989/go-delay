@@ -13,12 +13,14 @@ func LockFile() error {
 }
 
 func ExampleLinearBackoff() {
-	for attempt := 0; attempt < 5; attempt++ {
+	for attempt := 0; attempt <= 3; attempt++ {
 		err := LockFile()
 		if err == nil {
 			break
 		}
-		LinearBackoff(time.Second, 2.0, 0.5, attempt)
+		if attempt < 3 {
+			LinearBackoff(time.Second, 2.0, 0.5, attempt)
+		}
 	}
 	// Output:
 }
@@ -26,14 +28,16 @@ func ExampleLinearBackoff() {
 func ExampleLinearBackoffWithContext() {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
-	for attempt := 0; attempt < 5; attempt++ {
+	for attempt := 0; attempt <= 3; attempt++ {
 		err := LockFile()
 		if err == nil {
 			break
 		}
-		err = LinearBackoffWithContext(ctx, time.Second, 2.0, 0.5, attempt)
-		if err != nil {
-			break
+		if attempt < 3 {
+			err = LinearBackoffWithContext(ctx, time.Second, 2.0, 0.5, attempt)
+			if err != nil {
+				break
+			}
 		}
 	}
 	// Output:

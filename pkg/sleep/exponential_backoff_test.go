@@ -13,12 +13,14 @@ func DatabaseQuery() error {
 }
 
 func ExampleExponentialBackoff() {
-	for attempt := 0; attempt < 5; attempt++ {
+	for attempt := 0; attempt <= 3; attempt++ {
 		err := DatabaseQuery()
 		if err == nil {
 			break
 		}
-		ExponentialBackoff(time.Second, 2.0, 0.5, attempt)
+		if attempt < 3 {
+			ExponentialBackoff(time.Second, 2.0, 0.5, attempt)
+		}
 	}
 	// Output:
 }
@@ -26,14 +28,16 @@ func ExampleExponentialBackoff() {
 func ExampleExponentialBackoffWithContext() {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
-	for attempt := 0; attempt < 5; attempt++ {
+	for attempt := 0; attempt <= 3; attempt++ {
 		err := DatabaseQuery()
 		if err == nil {
 			break
 		}
-		err = ExponentialBackoffWithContext(ctx, time.Second, 2.0, 0.5, attempt)
-		if err != nil {
-			break
+		if attempt < 3 {
+			err = ExponentialBackoffWithContext(ctx, time.Second, 2.0, 0.5, attempt)
+			if err != nil {
+				break
+			}
 		}
 	}
 	// Output:

@@ -9,15 +9,11 @@ import (
 )
 
 func HealthCheck() error {
-	return nil
+	return context.Canceled
 }
 
 func ExampleRateLimit() {
-	for attempt := 0; attempt < 5; attempt++ {
-		err := HealthCheck()
-		if err == nil {
-			break
-		}
+	for err := HealthCheck(); err == nil; err = HealthCheck() {
 		RateLimit(10, time.Second, 0.5)
 	}
 	// Output:
@@ -26,11 +22,7 @@ func ExampleRateLimit() {
 func ExampleRateLimitWithContext() {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
-	for attempt := 0; attempt < 5; attempt++ {
-		err := HealthCheck()
-		if err == nil {
-			break
-		}
+	for err := HealthCheck(); err == nil; err = HealthCheck() {
 		err = RateLimitWithContext(ctx, 10, time.Second, 0.5)
 		if err != nil {
 			break

@@ -13,12 +13,14 @@ func NetworkRequest() error {
 }
 
 func ExampleRandomJitter() {
-	for attempt := 0; attempt < 5; attempt++ {
+	for attempt := 0; attempt <= 3; attempt++ {
 		err := NetworkRequest()
 		if err == nil {
 			break
 		}
-		RandomJitter(time.Second, 0.5)
+		if attempt < 3 {
+			RandomJitter(time.Second, 0.5)
+		}
 	}
 	// Output:
 }
@@ -26,14 +28,16 @@ func ExampleRandomJitter() {
 func ExampleRandomJitterWithContext() {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
-	for attempt := 0; attempt < 5; attempt++ {
+	for attempt := 0; attempt <= 3; attempt++ {
 		err := NetworkRequest()
 		if err == nil {
 			break
 		}
-		err = RandomJitterWithContext(ctx, time.Second, 0.5)
-		if err != nil {
-			break
+		if attempt < 3 {
+			err = RandomJitterWithContext(ctx, time.Second, 0.5)
+			if err != nil {
+				break
+			}
 		}
 	}
 	// Output:
