@@ -1,8 +1,5 @@
 name: "Build"
-on:
-  push:
-  schedule:
-    - cron: '0 0 * * 0'
+on: [push]
 jobs:
   verify:
     name: Verify dependencies
