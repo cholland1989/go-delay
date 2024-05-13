@@ -14,6 +14,7 @@ This library supports [version 1.18 and later][ver] of Go.
 
 ```go
 import "github.com/cholland1989/go-delay/pkg/delay"
+import "github.com/cholland1989/go-delay/pkg/retry"
 import "github.com/cholland1989/go-delay/pkg/sleep"
 ```
 
@@ -39,8 +40,9 @@ representing 0.5 seconds.
 jitter. For example, `delay.RandomJitter(time.Second, 0.5)` will return a
 `time.Duration` between 0.5 seconds and 1.5 seconds.
 
-Package [`sleep`](https://pkg.go.dev/github.com/cholland1989/go-delay/pkg/sleep)
-provides wrapper functions to simplify the most common use case.
+Package [`retry`](https://pkg.go.dev/github.com/cholland1989/go-delay/pkg/retry)
+and [`sleep`](https://pkg.go.dev/github.com/cholland1989/go-delay/pkg/sleep)
+provide wrapper functions to simplify the most common use cases.
 
 See the [documentation][doc] for more details.
 

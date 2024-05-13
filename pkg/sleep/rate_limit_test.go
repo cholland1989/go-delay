@@ -2,6 +2,7 @@ package sleep
 
 import (
 	"context"
+	"io"
 	"testing"
 	"time"
 
@@ -9,7 +10,7 @@ import (
 )
 
 func HealthCheck() error {
-	return context.Canceled
+	return io.EOF
 }
 
 func ExampleRateLimit() {

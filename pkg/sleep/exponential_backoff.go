@@ -1,5 +1,5 @@
 // Package sleep provides wrapper functions to simplify the most common use
-// case.
+// cases.
 package sleep
 
 import (
