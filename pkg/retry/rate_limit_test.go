@@ -2,7 +2,9 @@ package retry
 
 import (
 	"context"
+	"errors"
 	"io"
+	"log"
 	"testing"
 	"time"
 
@@ -14,14 +16,20 @@ func HealthCheck() error {
 }
 
 func ExampleRateLimit() {
-	_ = RateLimit(10, time.Second, 0.5, HealthCheck)
+	err := RateLimit(10, time.Second, 0.5, HealthCheck)
+	if err != nil && !errors.Is(err, io.EOF) {
+		log.Fatal(err)
+	}
 	// Output:
 }
 
 func ExampleRateLimitWithContext() {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
-	_ = RateLimitWithContext(ctx, 10, time.Second, 0.5, HealthCheck)
+	err := RateLimitWithContext(ctx, 10, time.Second, 0.5, HealthCheck)
+	if err != nil && !errors.Is(err, io.EOF) {
+		log.Fatal(err)
+	}
 	// Output:
 }
 

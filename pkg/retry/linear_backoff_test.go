@@ -3,6 +3,7 @@ package retry
 import (
 	"context"
 	"io"
+	"log"
 	"testing"
 	"time"
 
@@ -14,14 +15,20 @@ func LockFile() error {
 }
 
 func ExampleLinearBackoff() {
-	_ = LinearBackoff(3, time.Second, 2.0, 0.5, LockFile)
+	err := LinearBackoff(3, time.Second, 2.0, 0.5, LockFile)
+	if err != nil {
+		log.Fatal(err)
+	}
 	// Output:
 }
 
 func ExampleLinearBackoffWithContext() {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
-	_ = LinearBackoffWithContext(ctx, 3, time.Second, 2.0, 0.5, LockFile)
+	err := LinearBackoffWithContext(ctx, 3, time.Second, 2.0, 0.5, LockFile)
+	if err != nil {
+		log.Fatal(err)
+	}
 	// Output:
 }
 

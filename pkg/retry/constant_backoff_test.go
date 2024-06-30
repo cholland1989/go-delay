@@ -3,6 +3,7 @@ package retry
 import (
 	"context"
 	"io"
+	"log"
 	"testing"
 	"time"
 
@@ -14,14 +15,20 @@ func NetworkRequest() error {
 }
 
 func ExampleConstantBackoff() {
-	_ = ConstantBackoff(3, time.Second, 0.5, NetworkRequest)
+	err := ConstantBackoff(3, time.Second, 0.5, NetworkRequest)
+	if err != nil {
+		log.Fatal(err)
+	}
 	// Output:
 }
 
 func ExampleConstantBackoffWithContext() {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
-	_ = ConstantBackoffWithContext(ctx, 3, time.Second, 0.5, NetworkRequest)
+	err := ConstantBackoffWithContext(ctx, 3, time.Second, 0.5, NetworkRequest)
+	if err != nil {
+		log.Fatal(err)
+	}
 	// Output:
 }
 

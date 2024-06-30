@@ -3,6 +3,7 @@ package retry
 import (
 	"context"
 	"io"
+	"log"
 	"testing"
 	"time"
 
@@ -14,14 +15,20 @@ func DatabaseQuery() error {
 }
 
 func ExampleExponentialBackoff() {
-	_ = ExponentialBackoff(3, time.Second, 2.0, 0.5, DatabaseQuery)
+	err := ExponentialBackoff(3, time.Second, 2.0, 0.5, DatabaseQuery)
+	if err != nil {
+		log.Fatal(err)
+	}
 	// Output:
 }
 
 func ExampleExponentialBackoffWithContext() {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
-	_ = ExponentialBackoffWithContext(ctx, 3, time.Second, 2.0, 0.5, DatabaseQuery)
+	err := ExponentialBackoffWithContext(ctx, 3, time.Second, 2.0, 0.5, DatabaseQuery)
+	if err != nil {
+		log.Fatal(err)
+	}
 	// Output:
 }
 
