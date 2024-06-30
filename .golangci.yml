@@ -96,3 +96,5 @@ linters:
     - wastedassign
     - whitespace
     - zerologlint
+run:
+  tests: false
